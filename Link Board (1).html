@@ -1,0 +1,283 @@
+<!DOCTYPE html>
+<html lang="th">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Link Board</title>
+<link href="https://fonts.googleapis.com/css2?family=Noto+Sans+Thai:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+:root{--bg:#ececee;--card:#f7f7f8;--line:#d9d9dd;--text:#2b2b2f;--mute:#85858c;--btn:#4a4a52;--btntext:#ececee;--chip:#e2e2e6;color-scheme:light;
+box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}
+@media (prefers-color-scheme:dark){:root{--bg:#1d1d20;--card:#26262a;--line:#38383e;--text:#e6e6e9;--mute:#8e8e96;--btn:#c9c9d0;--btntext:#1d1d20;--chip:#303036;color-scheme:dark}}
+html{scroll-padding-top:env(safe-area-inset-top,0px)}
+*{box-sizing:border-box}
+body{margin:0;background:var(--bg);color:var(--text);font-family:"Noto Sans Thai",system-ui,-apple-system,"Segoe UI",sans-serif;font-size:15px;line-height:1.5}
+.wrap{max-width:720px;margin:0 auto;padding:36px 18px 70px}
+.head{display:flex;justify-content:space-between;align-items:flex-start;gap:10px}
+h1{font-size:22px;font-weight:600;margin:0 0 4px}
+.sub{color:var(--mute);margin:0 0 20px;font-size:14px}
+button{font:inherit;cursor:pointer;border:0;border-radius:9px;padding:8px 16px;background:var(--btn);color:var(--btntext);font-weight:500}
+button:hover{opacity:.88}
+button.ghost{background:var(--chip);color:var(--text)}
+input[type=text],input[type=search]{font:inherit;color:var(--text);background:var(--card);border:1px solid var(--line);border-radius:10px;padding:8px 12px;outline:none;min-width:0}
+input::placeholder{color:var(--mute)}
+.tools{display:flex;gap:8px;margin:0 0 14px;flex-wrap:wrap;align-items:center}
+.tools input{flex:1;min-width:140px}
+.chip{background:var(--chip);color:var(--mute);padding:6px 12px;border-radius:99px;font-size:13px}
+.chip.on{background:var(--btn);color:var(--btntext)}
+.list{display:flex;flex-direction:column;gap:8px}
+.item{display:flex;gap:12px;align-items:center;background:var(--card);border:1px solid var(--line);border-radius:12px;padding:11px 12px}
+.ico{flex:none;position:relative;width:76px;height:56px;border-radius:10px;background:var(--chip);display:grid;place-items:center;color:var(--mute);overflow:hidden;border:1px solid var(--line)}
+.ico svg{width:24px;height:24px}
+.ico img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover}
+.meta{flex:1;min-width:0}
+.meta a{display:block;color:var(--text);text-decoration:none;font-weight:500;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.meta a:hover{text-decoration:underline}
+.meta small{display:block;color:var(--mute);font-size:12.5px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.tag{font-size:11.5px;background:var(--chip);padding:1px 8px;border-radius:99px;margin-right:6px}
+.acts button{background:transparent;color:var(--mute);padding:6px 8px;font-size:13px;font-weight:400}
+.acts button:hover{color:var(--text);background:var(--chip);opacity:1}
+.empty{text-align:center;color:var(--mute);padding:44px 0;border:1px dashed var(--line);border-radius:12px}
+/* admin */
+#admin{display:none;background:var(--card);border:1px solid var(--line);border-radius:14px;padding:16px;margin:0 0 22px}
+#admin.open{display:block}
+#admin h2{font-size:15px;margin:0 0 10px}
+.sec{margin-bottom:18px}
+.g{display:grid;grid-template-columns:repeat(auto-fill,minmax(150px,1fr));gap:8px}
+.col{display:flex;align-items:center;gap:8px;background:var(--bg);border:1px solid var(--line);border-radius:10px;padding:6px 10px;font-size:13px}
+.col input{width:30px;height:30px;border:0;padding:0;background:none;cursor:pointer}
+.col span{flex:1}
+.f{display:flex;gap:8px;margin-bottom:8px;flex-wrap:wrap}
+.f input{flex:1;min-width:120px}
+.arow{display:flex;gap:8px;align-items:center;padding:8px 0;border-top:1px solid var(--line);flex-wrap:wrap}
+.arow .ico{width:56px;height:42px}
+.arow input{flex:1;min-width:110px;padding:6px 10px}
+.arow button{padding:6px 10px;font-size:13px}
+.status{font-size:12.5px;color:var(--mute);margin-top:6px}
+.nav{display:flex;align-items:center;gap:4px;background:var(--card);border:1px solid var(--line);border-radius:22px;padding:8px 12px;margin:0 0 26px;flex-wrap:wrap}
+.brand{display:flex;align-items:center;gap:10px;margin-right:16px;font-weight:600;letter-spacing:.3px;font-size:16px}
+.brand img{width:38px;height:38px;border-radius:10px;object-fit:cover}
+.brand b{color:var(--mute);font-weight:600}
+.tab{background:transparent;color:var(--text);display:flex;align-items:center;gap:7px;padding:8px 14px;border-radius:99px;font-weight:600;font-size:14px}
+.tab svg{width:17px;height:17px;color:var(--mute)}
+.tab.on{background:var(--chip)}
+.sp{flex:1}
+.toast{position:fixed;left:50%;bottom:calc(24px + env(safe-area-inset-bottom,0px));transform:translateX(-50%);background:var(--btn);color:var(--btntext);padding:8px 16px;border-radius:99px;font-size:13px;opacity:0;pointer-events:none;transition:opacity .2s}
+.toast.show{opacity:1}
+</style>
+</head>
+<body>
+<div class="wrap">
+  <nav class="nav">
+    <div class="brand"><img id="brandImg" alt=""><span id="brandTxt"></span></div>
+    <button class="tab on" data-v="home"><svg viewBox="0 0 24 24" fill="currentColor"><path d="M12 3 2 12h3v8h5v-6h4v6h5v-8h3z"/></svg>หน้าหลัก</button>
+    <button class="tab" data-v="hist"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><circle cx="12" cy="12" r="9"/><path d="M12 7v5l3 2"/></svg>ประวัติกดลิงก์</button>
+    <span class="sp"></span>
+    <button id="adminBtn" class="ghost" style="display:none">หลังบ้าน</button>
+  </nav>
+  <div id="homeHead"><h1 id="ttl"></h1><p class="sub" id="sub"></p></div>
+
+  <div id="admin">
+    <div class="sec"><h2>ข้อความหัวเว็บ</h2>
+      <div class="f"><input type="text" id="aTitle" placeholder="ชื่อเว็บ"><input type="text" id="aSub" placeholder="คำอธิบายใต้ชื่อ"></div>
+      <div class="f"><input type="text" id="aBrand" placeholder="ชื่อโลโก้ (ตัวอักษรข้างโลโก้)"><button class="ghost" data-logo="1">เปลี่ยนรูปโลโก้</button></div></div>
+    <div class="sec"><h2>สีเว็บ (แยกแต่ละส่วน)</h2><div class="g" id="cols"></div>
+      <div style="margin-top:8px"><button class="ghost" id="resetTheme">คืนค่าสีเทาเริ่มต้น</button></div></div>
+    <div class="sec"><h2>จัดการลิงก์</h2>
+      <div class="f"><input type="text" id="nUrl" placeholder="แปะลิงก์ใหม่ (หลายลิงก์ได้ คั่นด้วยบรรทัดหรือเว้นวรรค)"><input type="text" id="nTitle" placeholder="ชื่อ (ไม่ใส่ก็ได้)"><button id="nAdd">เพิ่ม</button></div>
+      <div id="arows"></div></div>
+    <div style="display:flex;gap:10px;align-items:center;margin-top:6px"><button id="saveBtn">บันทึก</button><div class="status" id="status" style="margin:0"></div></div>
+  </div>
+
+  <div id="home">
+  <div class="tools"><input type="search" id="q" placeholder="ค้นหา…"><span id="chips" style="display:flex;gap:6px;flex-wrap:wrap"></span></div>
+  <div id="list" class="list"></div>
+  </div>
+  <div id="hist" style="display:none">
+    <div class="f" style="justify-content:space-between;align-items:center"><h1 style="font-size:18px;margin:0">ประวัติกดลิงก์</h1><button class="ghost" id="clearHist" style="flex:none">ล้างประวัติ</button></div>
+    <div id="histList" class="list"></div>
+  </div>
+</div>
+<div id="toast" class="toast"></div>
+
+<script>
+var ICONS={
+ youtube:'<svg viewBox="0 0 24 24" fill="currentColor"><path d="M21.6 7.2a2.5 2.5 0 0 0-1.8-1.8C18.2 5 12 5 12 5s-6.2 0-7.8.4A2.5 2.5 0 0 0 2.4 7.2C2 8.8 2 12 2 12s0 3.2.4 4.8a2.5 2.5 0 0 0 1.8 1.8C5.8 19 12 19 12 19s6.2 0 7.8-.4a2.5 2.5 0 0 0 1.8-1.8c.4-1.6.4-4.8.4-4.8s0-3.2-.4-4.8zM10 15V9l5.2 3z"/></svg>',
+ discord:'<svg viewBox="0 0 24 24" fill="currentColor"><path d="M19.5 5.4A16 16 0 0 0 15.6 4.2l-.5 1a14.8 14.8 0 0 0-4.2 0l-.5-1a16 16 0 0 0-3.9 1.2C4 9 3.300 12.600 3.600 16.100a16 16 0 0 0 4.800 2.400l1-1.600a10 10 0 0 1-1.600-.8l.4-.3a11.400 11.400 0 0 0 7.600 0l.4.300c-.5.300-1 .6-1.600.8l1 1.600a16 16 0 0 0 4.800-2.400c.4-4-.7-7.600-2.900-10.700zM9.200 14c-.9 0-1.600-.8-1.600-1.800s.7-1.800 1.600-1.800 1.600.8 1.600 1.800-.7 1.800-1.600 1.800zm5.600 0c-.9 0-1.600-.8-1.600-1.800s.7-1.800 1.600-1.800 1.600.8 1.600 1.800-.7 1.800-1.600 1.800z"/></svg>',
+ web:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"><circle cx="12" cy="12" r="9"/><path d="M3 12h18M12 3c3 3.5 3 14.500 0 18M12 3c-3 3.500-3 14.500 0 18"/></svg>'
+};
+var NAMES={youtube:"YouTube",discord:"Discord",web:"เว็บ"};
+var DARK=window.matchMedia&&matchMedia("(prefers-color-scheme: dark)").matches;
+var DEF_THEME=DARK?{bg:"#1d1d20",card:"#26262a",text:"#e6e6e9",btn:"#c9c9d0",btntext:"#1d1d20"}:{bg:"#ececee",card:"#f7f7f8",text:"#2b2b2f",btn:"#4a4a52",btntext:"#ececee"};
+var OLD={bg:"#ececee",card:"#f7f7f8",text:"#2b2b2f",btn:"#4a4a52",btntext:"#ffffff"};
+var COLS=[["bg","พื้นหลังเว็บ"],["card","พื้นการ์ด"],["text","สีตัวอักษร"],["btn","สีปุ่ม"],["btntext","ตัวอักษรบนปุ่ม"]];
+var LOGO="data:image/jpeg;base64,__LOGO_B64__";
+var S={brand:"CRYSTALXOFFICIAL",logo:LOGO,title:"Link Board",sub:"แปะลิงก์ Discord, YouTube หรือเว็บไหนก็ได้ เก็บไว้ที่เดียว",theme:Object.assign({},DEF_THEME),custom:false,links:[]};
+var SEED=[["https://discord.gg/wFJxbWyy4s","Discord Server"],["https://www.dexterstorez1.store/","Dexter Storez"]];
+S.links=SEED.map(function(s){var it=parse(s[0]);it.title=s[1];return it});
+var filter="all",query="",ref=null,db=null,assets=null,isAdmin=false,saveT=null,pickId=null;
+
+function $(id){return document.getElementById(id)}
+function esc(s){return String(s).replace(/[&<>"]/g,function(c){return{"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;"}[c]})}
+function toast(t){var el=$("toast");el.textContent=t;el.classList.add("show");setTimeout(function(){el.classList.remove("show")},1500)}
+function parse(raw){
+  var u=raw.trim();if(!u)return null;
+  if(!/^[a-z][a-z0-9+.-]*:\/\//i.test(u))u="https://"+u;
+  var url;try{url=new URL(u)}catch(e){return null}
+  if(!/^https?:$/.test(url.protocol))return null;
+  var h=url.hostname.replace(/^www\./,""),type="web";
+  if(/(^|\.)(youtube\.com|youtu\.be)$/.test(h))type="youtube";
+  else if(/(^|\.)(discord\.gg|discord\.com|discordapp\.com)$/.test(h))type="discord";
+  return{id:Date.now().toString(36)+Math.random().toString(36).slice(2,6),url:url.href,host:h,type:type,title:"",img:""};
+}
+function applyTheme(){
+  var r=document.documentElement.style,t=S.theme;
+  ["--bg","--card","--text","--btn","--btntext","--mute","--line","--chip"].forEach(function(p){r.removeProperty(p)});
+  if(!S.custom)return;
+  r.setProperty("--bg",t.bg);r.setProperty("--card",t.card);r.setProperty("--text",t.text);r.setProperty("--btn",t.btn);r.setProperty("--btntext",t.btntext);
+  r.setProperty("--mute","color-mix(in srgb,"+t.text+" 50%,"+t.bg+")");r.setProperty("--line","color-mix(in srgb,"+t.text+" 14%,"+t.bg+")");r.setProperty("--chip","color-mix(in srgb,"+t.text+" 8%,"+t.card+")");
+}
+var dirty=false;
+function save(){
+  if(!isAdmin)return;
+  dirty=true;$("status").textContent="มีการเปลี่ยนแปลงที่ยังไม่ได้บันทึก";$("saveBtn").textContent="บันทึก *";
+}
+function doSave(){
+  if(!ref){toast("บันทึกไม่ได้ ยังไม่ได้เชื่อมต่อฐานข้อมูล");return}
+  $("status").textContent="กำลังบันทึก…";
+  ref.set({brand:S.brand,logo:S.logo,title:S.title,sub:S.sub,theme:S.custom?S.theme:null,links:S.links}).then(function(){
+    dirty=false;$("saveBtn").textContent="บันทึก";$("status").textContent="บันทึกแล้ว ทุกคนที่เปิดเว็บจะเห็นการเปลี่ยนแปลง";toast("บันทึกแล้ว");
+  },function(){$("status").textContent="บันทึกไม่สำเร็จ ลองใหม่อีกครั้ง";toast("บันทึกไม่สำเร็จ")});
+}
+window.addEventListener("beforeunload",function(e){if(dirty){e.preventDefault();e.returnValue=""}});
+
+function renderPublic(){
+  $("ttl").textContent=S.title;$("sub").textContent=S.sub;document.title=S.title;
+  var counts={all:S.links.length,youtube:0,discord:0,web:0};
+  S.links.forEach(function(i){counts[i.type]++});
+  $("chips").innerHTML=["all","youtube","discord","web"].map(function(k){
+    return'<button class="chip'+(filter===k?" on":"")+'" data-f="'+k+'">'+(k==="all"?"ทั้งหมด":NAMES[k])+" "+counts[k]+"</button>"}).join("");
+  var q=query.toLowerCase();
+  var vis=S.links.filter(function(i){return(filter==="all"||i.type===filter)&&(!q||(i.url+" "+i.title).toLowerCase().indexOf(q)>-1)});
+  $("list").innerHTML=vis.length?vis.map(function(i){
+    return'<div class="item"><div class="ico">'+(i.img?'<img src="'+esc(i.img)+'" alt="">':ICONS[i.type])+'</div><div class="meta"><a data-lid="'+i.id+'" href="'+esc(i.url)+'" target="_blank" rel="noopener noreferrer">'+esc(i.title||i.host)+'</a><small><span class="tag">'+NAMES[i.type]+'</span>'+esc(i.url.replace(/^https?:\/\//,""))+'</small></div><div class="acts"><button data-c="'+i.id+'">คัดลอก</button></div></div>'}).join(""):'<div class="empty">ยังไม่มีลิงก์</div>';
+}
+function renderAdmin(){
+  if(!isAdmin)return;
+  if(document.activeElement.id!=="aTitle")$("aTitle").value=S.title;
+  if(document.activeElement.id!=="aSub")$("aSub").value=S.sub;
+  if(document.activeElement.id!=="aBrand")$("aBrand").value=S.brand;
+  var cols=$("cols");
+  if(!cols.children.length){
+    cols.innerHTML=COLS.map(function(c){return'<label class="col"><input type="color" data-k="'+c[0]+'"><span>'+c[1]+"</span></label>"}).join("");
+  }
+  [].forEach.call(cols.querySelectorAll("input"),function(el){el.value=S.theme[el.dataset.k]});
+  if(!document.activeElement||!document.activeElement.closest||!document.activeElement.closest("#arows")){
+    $("arows").innerHTML=S.links.map(function(i){
+      return'<div class="arow"><div class="ico">'+(i.img?'<img src="'+esc(i.img)+'" alt="">':ICONS[i.type])+'</div><input type="text" value="'+esc(i.title)+'" placeholder="'+esc(i.host)+'" data-t="'+i.id+'"><button class="ghost" data-img="'+i.id+'">เปลี่ยนรูป</button>'+(i.img?'<button class="ghost" data-noimg="'+i.id+'">ลบรูป</button>':"")+'<button class="ghost" data-up="'+i.id+'">↑</button><button class="ghost" data-d="'+i.id+'">ลบ</button></div>'}).join("");
+  }
+}
+function renderNav(){
+  $("brandImg").src=S.logo||LOGO;
+  var b=S.brand||"",k=b.toUpperCase().indexOf("OFFICIAL");
+  $("brandTxt").innerHTML=k>0?esc(b.slice(0,k))+"<b>"+esc(b.slice(k))+"</b>":esc(b);
+}
+function render(){applyTheme();renderNav();renderPublic();renderAdmin()}
+
+function addLinks(){
+  var parts=$("nUrl").value.split(/\s+/).filter(Boolean),n=0;
+  parts.forEach(function(p){var it=parse(p);if(it){if(parts.length===1)it.title=$("nTitle").value.trim();S.links.unshift(it);n++}});
+  if(!n){toast("ไม่พบลิงก์ที่ใช้ได้");return}
+  $("nUrl").value="";$("nTitle").value="";render();save();toast("เพิ่ม "+n+" ลิงก์");
+}
+function resizeToBlob(file,cb,W0,H0){
+  var rd=new FileReader();
+  rd.onload=function(){var im=new Image();im.onload=function(){
+    var W=W0||304,H=H0||224,c=document.createElement("canvas");c.width=W;c.height=H;
+    var s=Math.max(W/im.width,H/im.height),w=im.width*s,h=im.height*s;
+    c.getContext("2d").drawImage(im,(W-w)/2,(H-h)/2,w,h);c.toBlob(cb,"image/jpeg",0.82)};im.src=rd.result};
+  rd.readAsDataURL(file);
+}
+
+document.addEventListener("click",function(e){
+  var t=e.target,d=t.dataset||{};
+  if(d.f){filter=d.f;renderPublic()}
+  if(d.c){var it=S.links.filter(function(i){return i.id===d.c})[0];
+    try{navigator.clipboard.writeText(it.url).then(function(){toast("คัดลอกแล้ว")},function(){toast("คัดลอกไม่ได้")})}catch(x){toast("คัดลอกไม่ได้")}}
+  if(d.d){S.links=S.links.filter(function(i){return i.id!==d.d});$("arows").innerHTML="";render();save()}
+  if(d.up){var k=S.links.findIndex(function(i){return i.id===d.up});if(k>0){var x=S.links.splice(k,1)[0];S.links.splice(k-1,0,x);$("arows").innerHTML="";render();save()}}
+  if(d.noimg){S.links.forEach(function(i){if(i.id===d.noimg)i.img=""});$("arows").innerHTML="";render();save()}
+  if(d.img){pickId=d.img;fileIn.value="";fileIn.click()}
+  if(d.logo){pickId="__logo";fileIn.value="";fileIn.click()}
+  if(d.v)setView(d.v);
+  var a=t.closest?t.closest("a[data-lid]"):null;
+  if(a){var li=S.links.filter(function(i){return i.id===a.dataset.lid})[0];if(li)addHist(li)}
+});
+$("q").oninput=function(e){query=e.target.value;renderPublic()};
+$("adminBtn").onclick=function(){$("admin").classList.toggle("open");$("arows").innerHTML="";renderAdmin()};
+$("nAdd").onclick=addLinks;
+$("saveBtn").onclick=doSave;
+$("nUrl").addEventListener("keydown",function(e){if(e.key==="Enter")addLinks()});
+$("aTitle").oninput=function(e){S.title=e.target.value;renderPublic();save()};
+$("aSub").oninput=function(e){S.sub=e.target.value;renderPublic();save()};
+$("aBrand").oninput=function(e){S.brand=e.target.value;renderNav();save()};
+$("clearHist").onclick=function(){hist=[];saveHist();renderHist();toast("ล้างประวัติแล้ว")};
+$("cols").addEventListener("input",function(e){var k=e.target.dataset.k;if(k){S.theme[k]=e.target.value;S.custom=true;applyTheme();save()}});
+$("resetTheme").onclick=function(){S.theme=Object.assign({},DEF_THEME);S.custom=false;render();save()};
+$("arows").addEventListener("input",function(e){var id=e.target.dataset.t;if(id){S.links.forEach(function(i){if(i.id===id)i.title=e.target.value});renderPublic();save()}});
+var fileIn=document.createElement("input");fileIn.type="file";fileIn.accept="image/*";fileIn.style.display="none";document.body.appendChild(fileIn);
+fileIn.onchange=function(){
+  var f=fileIn.files[0];if(!f||!pickId)return;
+  if(!assets){toast("อัปโหลดรูปไม่ได้ในบัญชีนี้");return}
+  resizeToBlob(f,function(b){
+    assets.upload(b).then(function(r){
+      if(pickId==="__logo"){S.logo=r.url;render();save();toast("เปลี่ยนโลโก้แล้ว");return}
+      S.links.forEach(function(i){if(i.id===pickId)i.img=r.url});
+      $("arows").innerHTML="";render();save();toast("ใส่รูปแล้ว");
+    },function(){toast("อัปโหลดไม่สำเร็จ")});
+  },pickId==="__logo"?128:0,pickId==="__logo"?128:0);
+};
+
+var hist=[];
+try{hist=JSON.parse(localStorage.getItem("linkboard.hist")||"[]")}catch(e){hist=[]}
+function saveHist(){try{localStorage.setItem("linkboard.hist",JSON.stringify(hist))}catch(e){}}
+function addHist(it){hist.unshift({title:it.title||it.host,url:it.url,type:it.type,t:Date.now()});hist=hist.slice(0,100);saveHist();renderHist()}
+function renderHist(){
+  $("histList").innerHTML=hist.length?hist.map(function(h){
+    var when=new Date(h.t).toLocaleString("th-TH",{dateStyle:"medium",timeStyle:"short"});
+    return'<div class="item"><div class="ico" style="width:48px;height:40px">'+ICONS[h.type||"web"]+'</div><div class="meta"><a href="'+esc(h.url)+'" target="_blank" rel="noopener noreferrer">'+esc(h.title)+'</a><small>'+esc(when)+' · '+esc(h.url.replace(/^https?:\/\//,""))+'</small></div></div>'}).join(""):'<div class="empty">ยังไม่มีประวัติการกดลิงก์</div>';
+}
+function setView(v){
+  var h=v==="hist";
+  $("home").style.display=h?"none":"";$("homeHead").style.display=h?"none":"";$("hist").style.display=h?"":"none";
+  [].forEach.call(document.querySelectorAll(".tab"),function(b){b.classList.toggle("on",b.dataset.v===v)});
+  if(h)renderHist();
+}
+render();
+
+/* shared data + admin check (page works without them) */
+(async function(){
+  try{
+    var user=await claude.use("user");
+    isAdmin=user?await user.canEdit():false;
+    if(isAdmin){$("adminBtn").style.display="";}
+    db=await claude.use("db");
+    if(isAdmin)assets=await claude.use("assets");
+    if(!db)return;
+    ref=db.doc("site/main");
+    ref.onSnapshot(function(snap){
+      if(dirty)return;
+      var d=snap.exists?snap.data():null;
+      if(d){
+        S.title=d.title||S.title;S.brand=d.brand||S.brand;S.logo=d.logo||S.logo;S.sub=(d.sub!==undefined?d.sub:S.sub);
+        var th=d.theme,same=th&&Object.keys(OLD).every(function(k){return th[k]===OLD[k]});
+        S.custom=!!th&&!same;S.theme=Object.assign({},DEF_THEME,S.custom?th:{});
+        S.links=Array.isArray(d.links)?d.links:S.links;
+        render();
+      }
+    },function(){});
+  }catch(e){}
+})();
+</script>
+</body>
+</html>
